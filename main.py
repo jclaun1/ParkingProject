@@ -25,8 +25,7 @@ occupancy = [None for i in range(12)]
 def run():
     global camera
     global occupancy
-    #        global app
-
+    
     print "Run 1"
         
     image_location = "/home/pi/BOX/BoxPic1.jpg"        #"./images/parkingPal.jpeg"
@@ -85,7 +84,6 @@ def run():
                 
 #################################################################################
 
-             # setup CP dimensions and averages and, if verbose, print to terminal
                  
         for control in control_boxes:
                 control_x = control[2]
@@ -93,9 +91,8 @@ def run():
                 control_w = abs(control[4])
                 control_h = abs(control[5])
 
-                if s.IS_VERBOSE: 
-                        print "INFO: CP", control[0], "dimensions:"
-                        print "      x:", control_x, "y:", control_y, "w:", control_w, "h:", control_h
+                print "INFO: CP", control[0], "dimensions:"
+                print "      x:", control_x, "y:", control_y, "w:", control_w, "h:", control_h
             
                         # append control average pixel to list of averages
                 control_average = imageread.get_area_average(
@@ -115,9 +112,6 @@ def run():
             
             # number of control points that conflict with parking space reading
             num_controls = 0
-            
-                        #print "INFO: Checking for differences...\n     ",
-
             for control in control_averages:
                 
 
@@ -132,7 +126,7 @@ def run():
                 if num_controls >= 2: is_occupied = True
 
 
-#****Update 5/10
+#****Update 5/26
                 if s.IS_VERBOSE and is_occupied:
                     print "x ",
             #    print "=> Space", i[0], "is filled.\n"
@@ -162,12 +156,8 @@ def main():
         print "Main 2"
         try:
             run()
-            #thread.start_new_thread(run, ())
         except:
             print "ERROR: Failed to start new thread. =("
-
-#       while not has_quit
-#           pass
 
 
 
