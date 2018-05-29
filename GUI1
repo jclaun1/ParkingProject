@@ -1,0 +1,32 @@
+from Tkinter import*
+from tkFileDialog import askopenfilename
+
+
+def browse_button():
+    global fileImage
+    fileImage= askopenfilename(parent=root, initialdir="C:/", title='Choose an image.')
+    print("opening %s" % fileImage)
+    original = Image.open(fileImage)
+    original = original.resize((1000,1000))
+    #Building tkinter canvas
+    global photoCanvas
+    photoCanvas = Canvas(root, width=1000, height=1000)
+    photoCanvas.pack()
+    photoCanvas.create_image(0,0, image="cuterpuppy.jpg", anchor="nw")
+
+def crop_button():
+    print("crop button")
+
+
+
+#Constructing new tkinter object
+root = Tk()
+root.geometry("300x300")
+root.title("Python GUI")
+
+
+#Creating browse button and crop button
+browsebutton = Button(root, text="Browse", command=browse_button).pack()
+cropButton = Button(root, text ="Crop", command=crop_button).pack()
+
+root.mainloop()
