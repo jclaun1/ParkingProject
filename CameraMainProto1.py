@@ -69,36 +69,33 @@ def run():
 		except:
 			print "Error while loading image"
 			sys.exit(1)
+			
+#################################################################################
 
                 for space in space_boxes:
-			space_x = space[2]
-			space_y = space[3]
-			space_w = abs(space[4])
-			space_h = abs(space[5])
-
 			space_average = imageread.get_area_average(
                                 pixels,
-                                space_x,
-                                space_y,
-                                space_w,
-                                space_h
+                                space[2],
+                                space[3],
+                                abs(space[2] - space[4]),
+                                abs(space[3] - space[5])
                         )
 			space_averages.append(space_average)
 
 #################################################################################
 
-# setup CP dimensions and averages and print
                 for control in control_boxes:
-                        # append control average pixel to list of averages
                         control_average = imageread.get_area_average(
                                 pixels, 
                                 control[2], 
                                 control[3], 
-                                control[4], 
-                                control[5]
+                                abs(control[2] - control[4]), 
+                                abs(control[3] - control[5])
                         )
                         control_averages.append(control_average)
-        
+			
+#################################################################################
+
                 counter = 1
                 numSpots = 24
                 numRows = 4
@@ -127,6 +124,7 @@ def run():
                 print "It took ", (time.time() - startTime), " time to complete this run."
                 print "\n\n"
 		imageread.time.sleep(loop_delay)
+		
 #############################################################################
 
 def main():
