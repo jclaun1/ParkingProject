@@ -12,10 +12,12 @@ def browse_button():
     w = Canvas(root, width=1920, height=1200)
     w.pack()
 
-    #Displays image on tkinter canvas                                                                                                                                                                             
+    #Displays image on tkinter canvas                                                                                                                                                                           \
+                                                                                                                                                                                                                 
     print("opening %s" % File)
     original = Image.open(File)
-#    original = original.resize((1920,1600)) #resize image                                                                                                                                                        
+#    original = original.resize((1920,1600)) #resize image                                                                                                                                                      \
+                                                                                                                                                                                                                 
     img = ImageTk.PhotoImage(original)
     w.image = img
     w.create_image(0, 0, image=img, anchor="nw")
@@ -29,10 +31,13 @@ def crop_button():
 def printcoords(event):
 
     global count,xVals, yVals, spotLabels, currentLabel
-    #Mouse clicking event                                                                                                                                                                                         
+    #Mouse clicking event                                                                                                                                                                                       \
+                                                                                                                                                                                                                 
     xVals.append(event.x)
     yVals.append(event.y)
+    w.create_oval(xVals[count]-2,yVals[count]-2,xVals[count]+2,yVals[count]+2, fill='red')
     count = count + 1
+
     i = 0
     if (count % 2) == 0:
 
@@ -43,29 +48,35 @@ def printcoords(event):
             currentLabel = 0
             spotLabels.append(currentLabel)
 
-        area = (xVals[i],yVals[i] , xVals[i+1], yVals[i+1])
-        i += 1
+        i = int(count/2)
+        if i == 1:
+            area = (xVals[i-1],yVals[i-1] , xVals[i], yVals[i])
+        else:
+            area = (xVals[i],yVals[i] , xVals[i+1], yVals[i+1])
+
         image = Image.open(File)
         cropped_img = image.crop(area)
-        #filename, file_extension = os.path.splitext(File)                                                                                                                                                        
-
+        #filename, file_extension = os.path.splitext(File)                                                                                                                                                      \
+                                                                                                                                                                                                                 
         cropped_img.show()
         saveimage = "test" + str(i) + '.JPG'
         cropped_img.save(saveimage)
-        print("save image: " , saveimage)
 
 def exit():
     w.unbind("<Button 1>")
 
 
-    #Array of SPOTS (arrays)                                                                                                                                                                                      
+    #Array of SPOTS (arrays)                                                                                                                                                                                    \
+                                                                                                                                                                                                                 
     fileData = []
 
-    #Original Spot Number = -1      --  Check nested for loop for explanation                                                                                                                                     
+    #Original Spot Number = -1      --  Check nested for loop for explanation                                                                                                                                   \
+                                                                                                                                                                                                                 
     spotIndex = -1
 
     numberLabel = -1
-    #Writing to a python file now for easy data transfer to other files                                                                                                                                           
+    #Writing to a python file now for easy data transfer to other files                                                                                                                                         \
+                                                                                                                                                                                                                 
     newFile = open('data_setup.py', 'w')
 
     print (xVals)
@@ -75,12 +86,14 @@ def exit():
     print(count)
     for i in range(count):
 
-        #To each individual spot, will add x0 and y0, followed by xf and yf upon next loop iteration                                                                                                              
+        #To each individual spot, will add x0 and y0, followed by xf and yf upon next loop iteration                                                                                                            \
+                                                                                                                                                                                                                 
         if (i % 2) == 0:
             spotIndex += 1
             print ("spot index = ", spotIndex)
             print("fileData = ", fileData)
-            #Create a new spot with no value                                                                                                                                                                      
+            #Create a new spot with no value                                                                                                                                                                    \
+                                                                                                                                                                                                                 
             fileData.append([])
             if spotLabels[spotIndex] == 1:
                 numberLabel += 1
@@ -93,27 +106,31 @@ def exit():
         fileData[spotIndex].append(xVals[i])
         fileData[spotIndex].append(yVals[i])
         print("NEW fileData = ", fileData)
-    #repr(fileData) takes the 2D array and converts it into string format to be written to the file                                                                                                               
+    #repr(fileData) takes the 2D array and converts it into string format to be written to the file                                                                                                             \
+                                                                                                                                                                                                                 
     newFile.write("boxes = " + repr(fileData) + "\n")
     newFile.close()
-
     quit()
 
 
-#Global variable 'spotLabel' == { 0 if control space | 1 if parking space}                                                                                                                                        
-spotLabels = [] #Array of labels for each click                                                                                                                                                                   
+#Global variable 'spotLabel' == { 0 if control space | 1 if parking space}                                                                                                                                      \
+                                                                                                                                                                                                                 
+spotLabels = [] #Array of labels for each click                                                                                                                                                                 \
+                                                                                                                                                                                                                 
 count = 0
 xVals = []
 yVals = []
 
-#Constructing tk() object                                                                                                                                                                                         
+#Constructing tk() object                                                                                                                                                                                       \
+                                                                                                                                                                                                                 
 root = Tk()
 root.geometry('1920x1600')
 root.configure(background='pink')
 root.title("Python GUI")
 root.title("Python GUI")
 
-#Adding Top level menu options                                                                                                                                                                                    
+#Adding Top level menu options                                                                                                                                                                                  \
+                                                                                                                                                                                                                 
 menu_bar = Menu(root)
 root.configure(menu=menu_bar)
 
