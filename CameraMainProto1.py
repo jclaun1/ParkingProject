@@ -53,6 +53,10 @@ def run():
 		control_averages = []
 
                 startTime = time.time()
+		
+		#6/26 UPDATE FOR DATA COLLECTION
+		#compareIterator = 0
+		#compareNum = 0
 		try:
                         loc = image_location + locationNum + ".jpg"
                         camera.capture(loc)
@@ -100,6 +104,7 @@ def run():
                 numSpots = 24
                 numRows = 4
                 
+		
                 for i, space in zip(space_boxes, space_averages):
                         # number of control points that conflict with readings
                         num_controls = 0
@@ -120,6 +125,13 @@ def run():
                         if counter%(numSpots/numRows) == 0:
                             print "\n"
                         counter += 1
+			
+			#6/26 UPDATE FOR DATA COLLECTION
+			#Set comparison number to compare results with actual information
+			#compareNum = counter + (numSpots*locNum)
+			#if is_occupied == #{actual boolean value of spot}:
+			#	#{append "correct" value for this spot"}
+			#if not, append incorrect value
 
                 print "It took ", (time.time() - startTime), " time to complete this run."
                 print "\n\n"
