@@ -302,8 +302,6 @@ mlcrop_window = tools_canvas3.create_window(10, 10, anchor=NW, window=ml_crop)
 view_crops = Button(tabFrame3, text='View Images', command=ml_option,pady=10, padx=10,)
 view_crops.configure(width = 10, activebackground = "#33B5E5", relief = FLAT)
 viewcrops_window = tools_canvas3.create_window(200, 10, anchor=NW, window=view_crops)
-toolsFrame = Frame(root,width=FRAME_WIDTH,height=40, bg="red")
-toolsFrame.pack(fill=BOTH, expand=True)
 
 ############################# Adding text widget to mailbox_frame #############################
 txt = Text(mailbox_frame, bg="white", width =50 ,height = 2, insertborderwidth=2, relief=SUNKEN, wrap = WORD,spacing1=2)
