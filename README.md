@@ -1,7 +1,6 @@
-# ParkingProject
+PARKING PAL
 
-
-5/31/18:
-- Completed Live update
-- Completed Black and White as well as RGB runs with high accuracy
-- Phase 1 nearly complete
+Jake Claunch          Software Engineer           Computer Science, Mathematics             CTO
+Igor Kuzmin           Business Expert             Financial Economy                         
+Nick Lambert          Mechanical Engineer         Mechanical Engineering                    
+Nick Shields          Facilitator                 African American Studies                  CEO
