@@ -1,6 +1,6 @@
 @echo off
 
-python ssh_Driver.py %*
+python driver.py %*
 cat pixels.py
 
 gcc -o Analyze Analyze.c
