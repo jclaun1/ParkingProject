@@ -17,7 +17,14 @@ def dossh(user, password, host):
     child.sendline('python Capture.py')
     
     child.expect(['pi@p1', pexpect.EOF])
-    child.sendline('scp /home/pi/pixels.txt')
+    child.sendline('gcc -o Analyze Analyze.c'
+                   
+    child.expect(['pi@p1', pexpect.EOF])
+    child.sendline('./Analyze')
+    
+    child.expect(['pi@p1', pexpect.EOF])
+    child.sendline('cat /home/pi/pixels.txt')
+    #child.sendline('scp /home/pi/pixels.txt')
     
     child.close()
     
