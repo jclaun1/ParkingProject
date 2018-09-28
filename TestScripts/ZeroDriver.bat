@@ -1,3 +1,3 @@
 @echo off
 
-var resultArray = system.callSystem("python myscript.py")
+set resultArray = system.callSystem("python myscript.py")
