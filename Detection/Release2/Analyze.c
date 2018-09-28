@@ -52,28 +52,26 @@ int compare_area(int test[], int expected[]){
 /*-----------------------------------------------------------------*/
 void writeResults(int spaceValues[]){
 
-//FILE IO 
-/*
 	FILE *fp;
-	fp = fopen("pixels.txt");
-	fprintf(fp)
-
-
-*/
-
+	fp = fopen('pixels.txt', 'a+');			//Read + Write, but only append when writing
+	fprintf(fp);
+	
+	fputs(spaceValues, fp);
+	
+	fclose(fp);
 }
 
 
 /*-----------------------------------------------------------------*/
 int readPixels(char* fileName){
-//FILE IO 
-/*
-	FILE *fp;
-	fp = fopen(fileName);
-	fprintf(fp)
-
-
-*/
+	FILE *fp = fopen('pixels.txt', 'r');
+	fprintf(fp);
+	
+	char buff[255];
+	fscanf(fp, "%s", buff);
+   	printf("%s\n", buff );
+	
+	fclose(fp);
 }
 
 
