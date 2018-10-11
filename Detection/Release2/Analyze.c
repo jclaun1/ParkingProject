@@ -1,7 +1,9 @@
 #include <stdio.h>
 
+global int numColors = 3;
+//global int numColors = 1;
 
-int average_area(int m_colors) {
+int average_area(int pixels, int x, int y, int w, int h) {
 	int control_averages[];
 	int space_averages[];
 
@@ -62,32 +64,30 @@ void writeResults(int spaceValues[]){
 }
 
 
-/*-----------------------------------------------------------------*/
-int readPixels(char* fileName){
-	FILE *fp = fopen('pixels.txt', 'r');
-	fprintf(fp);
-	
-	char buff[255];
-	fscanf(fp, "%s", buff);
-   	printf("%s\n", buff );
-	
-	fclose(fp);
-}
-
-
 
 /*-----------------------------------------------------------------*/
-int main() {
+//Args = (pixels, width, height)
+int main(int argc, char* argv[]) {
+	int width = argv[2];
+	int height = argv[3];
+	int pixels[width][height] = argv[1];
+	/*---------------------------------------*/
+	//Hard coded until working around a different settings file
 	int numSpots = 24;
 	int numControls = 5;
-	int pixels[4] = readPixels("pixels.txt")
+	int numColors = 1;
+	//int numColors = 3;
+	
+	int space_boxes[numSpots] = {};
+	int control_boxes[numSpots] = {};
+
+	/*---------------------------------------*/
+	
 	int space_averages[numSpots];
 	int control_averages[numSpots];
 	int spotValues[numSpots];
-	//Get these from settings files
-	int space_boxes = {}
-	int control_boxes = {}
-
+	
+	
 	//Getting average color values of each space
 	for(int i = 0; i < sizeof(space_boxes); i++){
 		int space[5] = space_boxes[i];
@@ -112,8 +112,7 @@ int main() {
 		bool is_occupied = false;
 
 		for(int controlNum = 0; controlNum < sizeof(control_averages); controlNum++){
-			if(compare_area(space_averages[i], control_averages[controlNum])==true)
-				num_controls +=1;
+			if(compare_area(space_averages[i], control_averages[controlNum])==true)  num_controls +=1;
 		}
 
 		if(num_controls >= 3)
