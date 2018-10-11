@@ -46,33 +46,31 @@ pwm.set_pwm_freq(60)
 numCameras = 3
 MAX_CHANNELS = 2
 degreeMultiplier = 3
-servo_positions = [0, 1]
-degreeArray = [0,0]
+servo_positions = [0, 1, 2, 3 , 4, 5]
 currentDegree = []
 inputDegree = servo_min
 
 #Assigning position matrices for each camera (1 element for each servo)
 for i in range(numCameras):
-    currentDegree.append(degreeArray)
+    currentDegree.append([0,0])
 
 while(True):
-    print(currentDegree)
+    #print(currentDegree)
     print("Which camera would you like to check? We have " + str(numCameras) + " cameras available. Select the corresponding number")
     print("Input '0' to exit the program.")
     cameraChoice = int(input())
 
     #Assuring accurate camera choice
-    while(cameraChoice <= 0 or cameraChoice > numCameras):
-        if(cameraChoice == 0): sys.exit()
-        print("Enter a number in the range 0 - " + str(numCameras))
+    if(cameraChoice == 0): sys.exit()
+    while(cameraChoice < 0 or cameraChoice > numCameras):
+        print("Enter a number in the range 1 - " + str(numCameras))
         cameraChoice = int(input())
 
     #Begin Camera index at 0 after receiving valid input
     cameraChoice -= 1
 
     #Took out a maximum number of loops. This will now continue indefinitely until break statement:
-    #finishCamera = False
-    while(True):
+    while(cameraChoice < numCameras and cameraChoice >= 0):
         print("Which servo would you like to control?")
         print("  1. Left - Right")
         print("  2. Up - Down")
@@ -80,18 +78,17 @@ while(True):
         currentServo = int(input()) - 1
 
         #Assuring accurate channel choice
-        if(currentServo == 2): break
+        if(currentServo == MAX_CHANNELS): break
         while(currentServo >= MAX_CHANNELS or currentServo < 0):
             print("Enter a number in the range 1 - 3")
             currentServo = int(input()) - 1
-        if(currentServo == 2): break
+        if(currentServo == MAX_CHANNELS): break
 
         #Assigns what channel we will be working with
         currentChannel = (MAX_CHANNELS * cameraChoice) + currentServo
 
-        inputDegree = currentDegree[cameraChoice][currentServo]
         option = 0
-        while(True):
+        while(option ):
             print("\nChoose an option:")
             print("  1. Input new degree for the servo")
             print("  2. Check the servo's current degree")
@@ -101,13 +98,20 @@ while(True):
             if(option == 1):
                 for i in range(1):
                     inputDegree = int(input("Enter the degree you want to turn to.\n"))
+
+                    #Use Min and Max values here
+                    #Ensure correct degree output
                     while(inputDegree < 0 or inputDegree > 180):
+                        #Setting Real Input
                         inputDegree = int(input("The input has to be within a 1-180 range\n"))
-                        newPos = servo_min + (inputDegree * degreeMultiplier)
-                        pwm.set_pwm(currentChannel, 0, newPos)
-                        time.sleep(1)
-                        pwm.set_pwm(currentChannel, 0, servo_zero)
-                        time.sleep(1)
+                        
+                    newPos = servo_min + (inputDegree * degreeMultiplier)
+
+                    #Setting Cameras to Input Degree
+                    pwm.set_pwm(currentChannel, 0, newPos)
+                    time.sleep(1)
+                    pwm.set_pwm(currentChannel, 0, servo_zero)
+                    time.sleep(1)
 
             elif(option == 2):
                 print("Current degree is " + str(currentDegree[cameraChoice][currentServo]))
