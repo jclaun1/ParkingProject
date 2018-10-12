@@ -87,8 +87,8 @@ while(True):
         #Assigns what channel we will be working with
         currentChannel = (MAX_CHANNELS * cameraChoice) + currentServo
 
-        option = 0
-        while(option ):
+        option = 1
+        while(option == 1 or option == 2):
             print("\nChoose an option:")
             print("  1. Input new degree for the servo")
             print("  2. Check the servo's current degree")
