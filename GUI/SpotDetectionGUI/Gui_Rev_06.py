@@ -287,6 +287,7 @@ def exit():
 
     #repr(fileData) takes the 2D array and converts it into string format to be written to the file                                                                                                             \
     newFile.write("boxes = " + repr(fileData) + "\n")
+    newFile.write("pixelBoundaries = " + repr(innerSpots) + "\n")
     newFile.close()
     quit()
 
