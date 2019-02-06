@@ -204,5 +204,5 @@ def main():
     newFile.write("boxes = " + repr(boundaries) + "\n")
     newFile.write("pixelBoundaries = " + repr(overallPixels) + "\n")
 
-
+    newFile.close()
 main()
