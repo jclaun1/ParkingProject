@@ -52,6 +52,7 @@ def test(filename):
 # ---------------------------------------------------------- #
 
 def get_area_average(pixels, spotPixels):
+    print "Getting averages"
     #Number of colors to be tested
     numColors = s.NUM_COLORS
     #setup totals based on number of colors being used [1, 3]
@@ -59,15 +60,19 @@ def get_area_average(pixels, spotPixels):
 
     for i in range(numColors):
         totals.append(0)
+    print "Initialized totals"
 
     #RBG/color values
     if numColors == 3:
+	print "Num colors = 3"
         for currPixel in spotPixels:
+	    print currPixel
             currX = currPixel[0]
             currY = currPixel[1]
-            for i in range(numColors]):
+            for i in range(numColors):
                 totals[k] += pixels[currX, currY][k]
     elif numColors == 1:
+	print "Num colors = 1"
         for currPixel in spotPixels:
             currX = currPixel[0]
             currY = currPixel[1]
@@ -76,12 +81,12 @@ def get_area_average(pixels, spotPixels):
         print "ERROR: Invalid number of colors in setup_data.py"
 
     #Calculate number of pixels in the area
-    numPixels = w * h
+    numPixels = len(spotPixels)
     for i in range(numColors):
         totals[i] /= numPixels
-            totals[numColors] += totals[i]
+        totals[numColors] += totals[i]
                 
-    #print totals[numColors]
+    print totals[numColors]
     return totals
 
 # ---------------------------------------------------------- #

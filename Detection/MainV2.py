@@ -5,7 +5,7 @@ import time
 
 import imageread
 import PiProtoSettings as s
-import AlgorithmTest as tester
+#import AlgorithmTest as tester
 
 try:
     import picamera
@@ -30,26 +30,22 @@ def run():
     global camera
     global occupancy
 
-    image_location = "/home/pi/BOX/ColorTest"
+    image_location = ""
+    #"/home/pi/BOX/ColorTest"
     loop_delay = s.PICTURE_DELAY
 
     space_boxes, control_boxes = __setup_box_data()
+    print "Got box data successfully"
     num_spaces = len(space_boxes)
     num_controls = len(control_boxes)
 
     assert num_spaces > 0
-    assert num_controls == 5
+    #assert num_controls == 5
 
     #Settings defaults to be used in the first run of the day/test set
-    previousVals = []
-    checkAvgs = []
-    prevAvailability = []
-    for i in range(num_spaces):
-        previousVals.append([])
-        checkAvgs.append(false)
-        prevAvailability.append(true)
-        for j in range(0, 5):
-            previousVals[i].append(-1)
+    previousVals = [[-1 for i in range(0,5)] for j in range(num_spaces) ]
+    checkAvgs = [False for j in range(num_spaces)]
+    prevAvailability = [True for j in range(num_spaces)]
 
     camera = picamera.PiCamera()
     camera.resolution = (2592, 1944)
@@ -84,12 +80,17 @@ def run():
         
         spaceIndex = 0
         for space in space_boxes:
-            checkAvgs[spaceIndex] = checkCriticalAreas(critPoints, pixels, previousVals[spaceIndex])
-            if checkAvgs[spaceIndex]:
-                space_average = imageread.get_area_average(pixels, space[2], space[3], abs(space[2] - space[4]), abs(space[3] - space[5]))
+	    print "In space boxes"
+            #checkAvgs[spaceIndex] = checkCriticalAreas(critPoints, pixels, previousVals[spaceIndex])
+            if checkAvgs[spaceIndex] == False:
+		print "In checkavgs"
+                space_average = imageread.get_area_average(pixels, space)
+		#space_average = imageread.get_area_average(pixels, space[2], space[3], abs(space[2] - space[4]), abs(space[3] - space[5]))
+		print "Got averages"
                 space_averages.append(space_average)
+		print space_averages[spaceIndex]
             spaceIndex += 1
-
+	print "Finished Space Boxes"
 #################################################################################
         
         controlIndex = 0
@@ -142,7 +143,7 @@ def main():
     global has_quit
     global camera
 
-    tester.main()
+    #tester.main()
 
     try:
         run()
@@ -154,9 +155,12 @@ def main():
 def __setup_box_data():
     try:
         box_data = setup_data.boxes
+	print "Got Box_data"
+	#print box_data
         pixel_data = setup_data.pixelBoundaries
+	print "Got pixel_data"
     except:
-        print "Issue in set_data.py for setting up box_data"
+        print "Issue in setup_data.py for setting up box_data"
         sys.exit(0)
 
     if not box_data:
@@ -164,14 +168,15 @@ def __setup_box_data():
         sys.exit()
     else:
         print "INFO: box_data contains data!"
-    
+    print "Got Here"    
     space_boxes = []
     control_boxes = []
 
+    return pixel_data, control_boxes
+
     counter = 0
     for data_set in box_data:
-        if data_set[1] == 1: space_boxes.append(pixelBoundaries[counter])
-        elif data_set[1] == 0: control_boxes.append(pixelBoundaries[counter])
+        if data_set[1] == 0: control_boxes.append(data_set)
         else: print "ERROR: Box-type not set to either 0 or 1."
         counter += 1
 

@@ -18,7 +18,7 @@ PARK_ID = 1
 SERVER_PASS = "pi"
 SERVER_URL = "http://10.173.33.129/pipark/server/"
 
-NUM_COLORS = 3    #RBG=3 ; BW=1
+NUM_COLORS = 1    #RBG=3 ; BW=1
 MAX_LOOPS = 10
 if NUM_COLORS == 1:    IMAGE_THRESHOLD = 13
 elif NUM_COLORS == 3:  IMAGE_THRESHOLD = 40
