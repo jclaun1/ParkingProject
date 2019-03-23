@@ -32,7 +32,6 @@ def main():
     spotIter = 0
     overallPixels = []
     for spot in box_data:
-
         boundary = boundaries[spotIter]
         xPixels = int(abs(boundary[2] - boundary[4]))
         yPixels = int(abs(boundary[3] - boundary[5])) 
