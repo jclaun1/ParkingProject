@@ -3,18 +3,19 @@ import threading
 import time
 #import urllib
 
-import imageread
+import imagereadOLD
 import PiProtoSettings as s
-import AlgorithmTest as tester
+#import AlgorithmTest as tester
 
 try:
     import picamera
+    print("Init pi camera successfully")
 except ImportError:
     print "ERROR: PiCamera Module needs to be installed."
     sys.exit(1)
 
 try:
-    import setup_data
+    import data_setup
 except ImportError:
     print "ERROR: setup_data.py does not exist. Run ./pipark_setup.py first"
     sys.exit(1)
@@ -37,35 +38,45 @@ def run():
     num_spaces = len(space_boxes)
     num_controls = len(control_boxes)
 
-    assert num_spaces > 0
-    assert num_controls == 5
+    print("Num Spaces = ", len(space_boxes))
+    #assert num_spaces > 0
+    #assert num_controls == 5
 
     #Settings defaults to be used in the first run of the day/test set
     previousVals = []
     checkAvgs = []
+    
+    
     prevAvailability = []
+    """
     for i in range(num_spaces):
         previousVals.append([])
         checkAvgs.append(false)
         prevAvailability.append(true)
         for j in range(0, 5):
             previousVals[i].append(-1)
-
+    """
+    #camera = picamera.PiCamera()
+    print("Approaching climax")
     camera = picamera.PiCamera()
+    print("Nut")
     camera.resolution = (2592, 1944)
     print "Initialized Camera"
 
     for locNum in range(s.MAX_LOOPS):
-        outputFileLocation = "outputData" + locNum + ".txt"
+	print("the fuck is going on")
+        outputFileLocation = "outputData" + str(locNum) + ".txt"
+	print("outputFileLocation")
         locationNum = str(locNum)
-
+	print("Oof")
         space_averages = []
         control_averages = []
-
+	print("yeet")
         startTime = time.time()
-        
+	print("Fuck")        
         try:
-            loc = image_location + locationNum + ".jpg"
+            loc = image_location + str(locationNum) + ".jpg"
+	    print("Skin a skinny nigga")
             camera.capture(loc)
             print "Camera Just Captured and Image! Analyzing now.."
             print ""
@@ -80,7 +91,8 @@ def run():
         except:
             print "Error while loading image"
             sys.exit(1)
-            
+
+	print("If you do jumping jacks and your titties don't move you're a boy")            
 #################################################################################
         
         spaceIndex = 0
@@ -103,11 +115,11 @@ def run():
 #################################################################################
 
         counter = 1
-        numSpots = 24
+        numSpots = 45
         numRows = 4
         checkIndex = 0
         outputBoxes = []
-
+	print("Round 2")
         for i, space in zip(space_boxes, space_averages):
             couter = counter + 1
             num_controls = 0
@@ -120,21 +132,22 @@ def run():
             if num_controls >= 3: is_occupied = True
             if is_occupied:
                 print "x "
-                outputBoxes.append("" + counter + " " + " " + 1 + " " + space[2] + " " + space[3] + " " space[4] + " " space[5] + "\n")
+                outputBoxes.append("" + counter + " " + " " + 1 + " " + space[2] + " " + space[3] + " " + space[4] + " " + space[5] + "\n")
             else:
                 print "o "
-                outputBoxes.append("" + counter + " " + " " + 0 + " " + space[2] + " " + space[3] + " " space[4] + " " space[5] + "\n")
+                outputBoxes.append("" + counter + " " + " " + 0 + " " + space[2] + " " + space[3] + " " + space[4] + " " + space[5] + "\n")
 
             if counter%(numSpots/numRows) == 0:
                 print "\n"
-
+	"""
             if previousVals[0][0] != -1:
                 prevAvailability[checkIndex] = is_occupied
             checkIndex += 1
 
-        for i in range(len(previousVals)):
+        
+	for i in range(len(previousVals)):
             previousVals[i] = space_averages[i]
-
+	"""
         print "It took ", (time.time() - startTime), " time to complete this run."
         print "\n\n"
 
@@ -150,19 +163,23 @@ def main():
     global has_quit
     global camera
 
-    tester.main()
+    #tester.main()
 
     try:
         run()
     except:
         print "ERROR: Failed to start new thread. =("
 
+    camera = picamera.PiCamera()
+    camera.capture("a.jpg")
 #---------------------------------------------------------------------------------------------------------#
 
 def __setup_box_data():
     try:
-        box_data = setup_data.boxes
-        pixel_data = setup_data.pixelBoundaries
+        box_data = data_setup.boxes
+	#print(data_setup.boxes)
+	print(box_data)
+        #pixel_data = setup_data.pixelBoundaries
     except:
         print "Issue in set_data.py for setting up box_data"
         sys.exit(0)
@@ -178,11 +195,13 @@ def __setup_box_data():
 
     counter = 0
     for data_set in box_data:
-        if data_set[1] == 1: space_boxes.append(pixelBoundaries[counter])
-        elif data_set[1] == 0: control_boxes.append(pixelBoundaries[counter])
+        print(data_set)
+        if data_set[0] == 1: space_boxes.append(data_set) #space_boxes.append(pixelBoundaries[counter])
+        elif data_set[0] == 0: control_boxes.append(data_set) #control_boxes.append(pixelBoundaries[counter])
         else: print "ERROR: Box-type not set to either 0 or 1."
         counter += 1
 
+    print(space_boxes)	
     return space_boxes, control_boxes
     
 #---------------------------------------------------------------------------------------------------------#
