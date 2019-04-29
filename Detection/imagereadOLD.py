@@ -72,6 +72,12 @@ def get_area_average(pixels, x, y, w, h):
 
 	#Calculate number of pixels in the area
 	numPixels = w * h
+	if(numPixels == 0):
+	    print(x)
+	    print(y)
+	    print(w)
+	    print(h)
+            
         for i in range(numColors):
 		totals[i] /= numPixels
                 totals[numColors] += totals[i]

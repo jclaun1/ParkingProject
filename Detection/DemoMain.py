@@ -1,9 +1,10 @@
 import thread
 import threading
 import time
+import sys
 #import urllib
 
-import imagereadOLD
+import imagereadOLD as imageread
 import PiProtoSettings as s
 #import AlgorithmTest as tester
 
@@ -31,14 +32,13 @@ def run():
     global camera
     global occupancy
 
-    image_location = "/home/pi/BOX/ColorTest"
+    image_location = "/home/pi/ParkingProject/Detection/ColorTest"
     loop_delay = s.PICTURE_DELAY
 
     space_boxes, control_boxes = __setup_box_data()
     num_spaces = len(space_boxes)
     num_controls = len(control_boxes)
 
-    print("Num Spaces = ", len(space_boxes))
     #assert num_spaces > 0
     #assert num_controls == 5
 
@@ -57,29 +57,21 @@ def run():
             previousVals[i].append(-1)
     """
     #camera = picamera.PiCamera()
-    print("Approaching climax")
     camera = picamera.PiCamera()
-    print("Nut")
     camera.resolution = (2592, 1944)
     print "Initialized Camera"
 
     for locNum in range(s.MAX_LOOPS):
-	print("the fuck is going on")
         outputFileLocation = "outputData" + str(locNum) + ".txt"
-	print("outputFileLocation")
         locationNum = str(locNum)
-	print("Oof")
         space_averages = []
         control_averages = []
-	print("yeet")
         startTime = time.time()
-	print("Fuck")        
-        try:
+	if(1 == 1):
+#        try:
             loc = image_location + str(locationNum) + ".jpg"
-	    print("Skin a skinny nigga")
+	    camera.preview
             camera.capture(loc)
-            print "Camera Just Captured and Image! Analyzing now.."
-            print ""
             image = imageread.Image.open(loc)
             #image = image.transpose(imageread.Image.FLIP_TOP_BOTTOM)
             #image = image.transpose(imageread.Image.FLIP_LEFT_RIGHT)
@@ -88,28 +80,28 @@ def run():
                 #image = image.convert('1')
             pixels = image.load()
                         
-        except:
+        else:
+	#except:
             print "Error while loading image"
             sys.exit(1)
 
-	print("If you do jumping jacks and your titties don't move you're a boy")            
 #################################################################################
         
         spaceIndex = 0
         for space in space_boxes:
-            checkAvgs[spaceIndex] = checkCriticalAreas(critPoints, pixels, previousVals[spaceIndex])
-            if checkAvgs[spaceIndex]:
-                space_average = imageread.get_area_average(pixels, space[2], space[3], abs(space[2] - space[4]), abs(space[3] - space[5]))
-                space_averages.append(space_average)
+            #checkAvgs[spaceIndex] = checkCriticalAreas(critPoints, pixels, previousVals[spaceIndex])
+            #if checkAvgs[spaceIndex]:
+            space_average = imageread.get_area_average(pixels, int(space[2]), int(space[3]), int(abs(space[2] - space[4])), int(abs(space[3] - space[5])))
+            space_averages.append(space_average)
             spaceIndex += 1
 
 #################################################################################
         
         controlIndex = 0
         for control in control_boxes:
-            if checkAvgs[controlIndex]:
-                control_average = imageread.get_area_average(pixels, control[2], control[3], abs(control[2] - control[4]), abs(control[3] - control[5]))
-                control_averages.append(control_average)
+            #if checkAvgs[controlIndex]:
+            control_average = imageread.get_area_average(pixels, int(control[2]), int(control[3]), int(abs(control[2] - control[4])), int(abs(control[3] - control[5])))
+            control_averages.append(control_average)
             controlIndex += 1
             
 #################################################################################
@@ -119,7 +111,6 @@ def run():
         numRows = 4
         checkIndex = 0
         outputBoxes = []
-	print("Round 2")
         for i, space in zip(space_boxes, space_averages):
             couter = counter + 1
             num_controls = 0
@@ -132,10 +123,13 @@ def run():
             if num_controls >= 3: is_occupied = True
             if is_occupied:
                 print "x "
-                outputBoxes.append("" + counter + " " + " " + 1 + " " + space[2] + " " + space[3] + " " + space[4] + " " + space[5] + "\n")
+		outputBoxes.append(1)
+	 	#outputBoxes[counter-1] = [counter, 1, space[2], space[3], space[4], space[5]]
+                #outputBoxes.append(" " + str(counter) + " " + " " + "1" + " " + str(space[2]) + " " + str(space[3]) + " " + str(space[4]) + " " + str(space[5]) + "\n")
             else:
                 print "o "
-                outputBoxes.append("" + counter + " " + " " + 0 + " " + space[2] + " " + space[3] + " " + space[4] + " " + space[5] + "\n")
+                outputBoxes.append(0)
+		#outputBoxes.append(" " + str(counter) + " " + " " + "0" + " " + str(space[2]) + " " + str(space[3]) + " " + str(space[4]) + " " + str(space[5]) + "\n")
 
             if counter%(numSpots/numRows) == 0:
                 print "\n"
@@ -152,7 +146,10 @@ def run():
         print "\n\n"
 
         fileOutput = open(outputFileLocation, "w")
-        fileOutput.write("SpotData = ", outputBoxes)
+        fileOutput.write("SpotData = ")
+	for i in range(0, len(outputBoxes)):
+	    fileOutput.write(str(outputBoxes[i]))
+	    fileOutput.write(", ")
         fileOutput.close()
 
         imageread.time.sleep(loop_delay)
@@ -164,14 +161,16 @@ def main():
     global camera
 
     #tester.main()
-
+    run()
+    """
     try:
         run()
     except:
         print "ERROR: Failed to start new thread. =("
-
+    """
     camera = picamera.PiCamera()
-    camera.capture("a.jpg")
+    camera.preview()
+    camera.capture("/home/pi/ParkingProject/Detection/a.jpg")
 #---------------------------------------------------------------------------------------------------------#
 
 def __setup_box_data():
